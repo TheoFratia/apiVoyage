@@ -76,7 +76,9 @@
         ]
     },
     "conflict": {
-        "symfony/symfony": "*"
+        "symfony/symfony": "<3.3",
+        "symfony/twig-bundle": "<3.3",
+        "symfony/debug": "<3.3"
     },
     "extra": {
         "symfony": {
