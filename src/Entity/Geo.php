@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: GeoRepository::class)]
 class Geo
@@ -20,6 +21,12 @@ class Geo
 
     #[ORM\Column(length: 124)]
     #[Groups(["getAllCountryAndCity"])]
+    #[Assert\Length(
+        min: 2,
+        max: 50,
+        minMessage: 'Votre question doit faire au moins {{ limit }} caractères de long',
+        maxMessage: 'Votre question doit faire au maximum {{ limit }} caractères de long',
+    )]
     private ?string $city = null;
 
     #[ORM\Column(length: 200)]
