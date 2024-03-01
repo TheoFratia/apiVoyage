@@ -69,7 +69,7 @@ class AppFixtures extends Fixture
             $geo->setLatitude($faker->latitude());
             $geo->setUpdatedAt(new \DateTime());
             $geo->setCreatedAt(new \DateTime());
-            $geo->setStatus('active');
+            $geo->setStatus('on');
 
             $manager->persist($geo);
         }

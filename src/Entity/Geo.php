@@ -20,46 +20,56 @@ class Geo
     private ?int $id = null;
 
     #[ORM\Column(length: 124)]
-    #[Groups(["getAllCountryAndCity"])]
+    #[Groups(["getAllCountryAndCity", "getPlace"])]
     #[Assert\Length(
         min: 2,
-        max: 50,
+        max: 10,
         minMessage: 'Votre question doit faire au moins {{ limit }} caractères de long',
         maxMessage: 'Votre question doit faire au maximum {{ limit }} caractères de long',
     )]
     private ?string $city = null;
 
     #[ORM\Column(length: 200)]
-    #[Groups(["getAllCountryAndCity"])]
+    #[Groups(["getAllCountryAndCity", "getPlace"])]
     private ?string $country = null;
 
+    #[Groups(["getPlace"])]
     #[ORM\Column(type: Types::TEXT)]
     private ?string $address = null;
 
+    #[Groups(["getPlace"])]
     #[ORM\Column(type: Types::TEXT)]
     private ?string $longitude = null;
 
+    #[Groups(["getPlace"])]
     #[ORM\Column(type: Types::TEXT)]
     private ?string $latitude = null;
 
+    #[Groups(["getPlace"])]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $updated_at = null;
 
+    #[Groups(["getPlace"])]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $created_at = null;
 
+    #[Groups(["getPlace"])]
     #[ORM\Column(length: 24)]
     private ?string $status = null;
 
+    #[Groups(["getPlace"])]
     #[ORM\ManyToMany(targetEntity: Essential::class, mappedBy: 'idGeo')]
     private Collection $essentials;
 
+    #[Groups(["getPlace"])]
     #[ORM\ManyToMany(targetEntity: Info::class, mappedBy: 'idGeo')]
     private Collection $infos;
 
+    #[Groups(["getPlace"])]
     #[ORM\OneToMany(mappedBy: 'idGeo', targetEntity: PointOfInterest::class)]
     private Collection $pointOfInterests;
 
+    #[Groups(["getPlace"])]
     #[ORM\OneToMany(mappedBy: 'idGeo', targetEntity: Save::class)]
     private Collection $saves;
 
