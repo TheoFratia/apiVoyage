@@ -35,8 +35,12 @@ class Personna
     #[ORM\Column(length: 255)]
     private ?string $address = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $type = null;
+    #[ORM\ManyToOne(inversedBy: 'personnas')]
+    private ?PointOfInterest $pointOfInterest = null;
+
+    #[ORM\ManyToOne(inversedBy: 'personnas')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $users = null;
 
     public function getId(): ?int
     {
@@ -127,14 +131,26 @@ class Personna
         return $this;
     }
 
-    public function getType(): ?string
+    public function getPointOfInterest(): ?PointOfInterest
     {
-        return $this->type;
+        return $this->pointOfInterest;
     }
 
-    public function setType(string $type): static
+    public function setPointOfInterest(?PointOfInterest $pointOfInterest): static
     {
-        $this->type = $type;
+        $this->pointOfInterest = $pointOfInterest;
+
+        return $this;
+    }
+
+    public function getUsers(): ?User
+    {
+        return $this->users;
+    }
+
+    public function setUsers(?User $users): static
+    {
+        $this->users = $users;
 
         return $this;
     }

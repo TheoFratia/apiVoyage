@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -29,6 +31,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 48)]
     private ?string $username = null;
+
+    #[ORM\OneToMany(mappedBy: 'users', targetEntity: Personna::class)]
+    private Collection $personnas;
+
+    public function __construct()
+    {
+        $this->personnas = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -108,6 +118,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setUsername(string $username): static
     {
         $this->username = $username;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Personna>
+     */
+    public function getPersonnas(): Collection
+    {
+        return $this->personnas;
+    }
+
+    public function addPersonna(Personna $personna): static
+    {
+        if (!$this->personnas->contains($personna)) {
+            $this->personnas->add($personna);
+            $personna->setUsers($this);
+        }
+
+        return $this;
+    }
+
+    public function removePersonna(Personna $personna): static
+    {
+        if ($this->personnas->removeElement($personna)) {
+            // set the owning side to null (unless already changed)
+            if ($personna->getUsers() === $this) {
+                $personna->setUsers(null);
+            }
+        }
 
         return $this;
     }

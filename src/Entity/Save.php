@@ -20,7 +20,7 @@ class Save
     private Collection $idPointOfInterest;
 
     #[ORM\ManyToOne(inversedBy: 'saves')]
-    private ?geo $idGeo = null;
+    private geo $idGeo;
 
     public function __construct()
     {

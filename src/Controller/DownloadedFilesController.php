@@ -9,7 +9,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -32,7 +31,7 @@ class DownloadedFilesController extends AbstractController
         $downloadedFile->setCreatedAt(new \DateTime());
 
         $downloadedFile->setFile($file);
-        $downloadedFile->setMineType($file->getClientMimeType());
+        $downloadedFile->setMimeType($file->getClientMimeType());
         $downloadedFile->setRealName($file->getClientOriginalName());
         $downloadedFile->setName($file->getClientOriginalName());
         $downloadedFile->setPublicPath("/public/medias/pictures");

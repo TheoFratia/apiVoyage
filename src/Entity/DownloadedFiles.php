@@ -27,7 +27,7 @@ class DownloadedFiles
     private ?string $publicPath = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $mineType = null;
+    private ?string $mimeType = null;
 
     #[ORM\Column(length: 255)]
     private ?string $name = null;
@@ -43,6 +43,15 @@ class DownloadedFiles
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $createdAt = null;
+
+    #[ORM\ManyToOne(inversedBy: 'images')]
+    private ?Essential $essential = null;
+
+    #[ORM\ManyToOne(inversedBy: 'images')]
+    private ?Info $info = null;
+
+    #[ORM\ManyToOne(inversedBy: 'images')]
+    private ?PointOfInterest $pointOfInterest = null;
 
     public function getId(): ?int
     {
@@ -102,14 +111,14 @@ class DownloadedFiles
         return $this;
     }
 
-    public function getMineType(): ?string
+    public function getMimeType(): ?string
     {
-        return $this->mineType;
+        return $this->mimeType;
     }
 
-    public function setMineType(string $mineType): static
+    public function setMimeType(string $mimeType): static
     {
-        $this->mineType = $mineType;
+        $this->mimeType = $mimeType;
 
         return $this;
     }
@@ -158,6 +167,42 @@ class DownloadedFiles
     public function setCreatedAt(\DateTimeInterface $createdAt): static
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getEssential(): ?Essential
+    {
+        return $this->essential;
+    }
+
+    public function setEssential(?Essential $essential): static
+    {
+        $this->essential = $essential;
+
+        return $this;
+    }
+
+    public function getInfo(): ?Info
+    {
+        return $this->info;
+    }
+
+    public function setInfo(?Info $info): static
+    {
+        $this->info = $info;
+
+        return $this;
+    }
+
+    public function getPointOfInterest(): ?PointOfInterest
+    {
+        return $this->pointOfInterest;
+    }
+
+    public function setPointOfInterest(?PointOfInterest $pointOfInterest): static
+    {
+        $this->pointOfInterest = $pointOfInterest;
 
         return $this;
     }

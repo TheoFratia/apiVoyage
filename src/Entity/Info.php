@@ -32,11 +32,15 @@ class Info
     private ?string $status = null;
 
     #[ORM\ManyToOne(inversedBy: 'infos')]
-    private ?TypeInfo $idTypeInfo = null;
+    private TypeInfo $idTypeInfo;
+
+    #[ORM\OneToMany(mappedBy: 'info', targetEntity: DownloadedFiles::class)]
+    private Collection $images;
 
     public function __construct()
     {
         $this->idGeo = new ArrayCollection();
+        $this->images = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -124,6 +128,36 @@ class Info
     public function setIdTypeInfo(?TypeInfo $idTypeInfo): static
     {
         $this->idTypeInfo = $idTypeInfo;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, DownloadedFiles>
+     */
+    public function getImages(): Collection
+    {
+        return $this->images;
+    }
+
+    public function addImage(DownloadedFiles $image): static
+    {
+        if (!$this->images->contains($image)) {
+            $this->images->add($image);
+            $image->setInfo($this);
+        }
+
+        return $this;
+    }
+
+    public function removeImage(DownloadedFiles $image): static
+    {
+        if ($this->images->removeElement($image)) {
+            // set the owning side to null (unless already changed)
+            if ($image->getInfo() === $this) {
+                $image->setInfo(null);
+            }
+        }
 
         return $this;
     }

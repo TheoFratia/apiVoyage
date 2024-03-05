@@ -43,10 +43,18 @@ class PointOfInterest
     #[ORM\ManyToMany(targetEntity: Save::class, mappedBy: 'idPointOfInterest')]
     private Collection $saves;
 
+    #[ORM\OneToMany(mappedBy: 'pointOfInterest', targetEntity: DownloadedFiles::class)]
+    private Collection $images;
+
+    #[ORM\OneToMany(mappedBy: 'pointOfInterest', targetEntity: Personna::class)]
+    private Collection $personnas;
+
     public function __construct()
     {
         $this->idIType = new ArrayCollection();
         $this->saves = new ArrayCollection();
+        $this->images = new ArrayCollection();
+        $this->personnas = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -184,6 +192,66 @@ class PointOfInterest
     {
         if ($this->saves->removeElement($save)) {
             $save->removeIdPointOfInterest($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, DownloadedFiles>
+     */
+    public function getImages(): Collection
+    {
+        return $this->images;
+    }
+
+    public function addImage(DownloadedFiles $image): static
+    {
+        if (!$this->images->contains($image)) {
+            $this->images->add($image);
+            $image->setPointOfInterest($this);
+        }
+
+        return $this;
+    }
+
+    public function removeImage(DownloadedFiles $image): static
+    {
+        if ($this->images->removeElement($image)) {
+            // set the owning side to null (unless already changed)
+            if ($image->getPointOfInterest() === $this) {
+                $image->setPointOfInterest(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Personna>
+     */
+    public function getPersonnas(): Collection
+    {
+        return $this->personnas;
+    }
+
+    public function addPersonna(Personna $personna): static
+    {
+        if (!$this->personnas->contains($personna)) {
+            $this->personnas->add($personna);
+            $personna->setPointOfInterest($this);
+        }
+
+        return $this;
+    }
+
+    public function removePersonna(Personna $personna): static
+    {
+        if ($this->personnas->removeElement($personna)) {
+            // set the owning side to null (unless already changed)
+            if ($personna->getPointOfInterest() === $this) {
+                $personna->setPointOfInterest(null);
+            }
         }
 
         return $this;
