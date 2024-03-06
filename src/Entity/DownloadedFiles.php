@@ -7,6 +7,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: DownloadedFilesRepository::class)]
 #[Vich\Uploadable]
@@ -15,32 +16,42 @@ class DownloadedFiles
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(["getByCityOrCountry"])]
     private ?int $id = null;
 
+    #[Groups(["getByCityOrCountry"])]
     #[ORM\Column(length: 255)]
     private ?string $realName = null;
 
+    #[Groups(["getByCityOrCountry"])]
     #[ORM\Column(length: 255)]
     private ?string $realPath = null;
 
+    #[Groups(["getByCityOrCountry"])]
     #[ORM\Column(length: 255)]
     private ?string $publicPath = null;
 
+    #[Groups(["getByCityOrCountry"])]
     #[ORM\Column(length: 255)]
     private ?string $mimeType = null;
 
+    #[Groups(["getByCityOrCountry"])]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
+    #[Groups(["getByCityOrCountry"])]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $updatedAt = null;
 
+    #[Groups(["getByCityOrCountry"])]
     #[ORM\Column(length: 24)]
     private ?string $status = null;
 
+    #[Groups(["getByCityOrCountry"])]
     #[Vich\UploadableField(mapping: 'pictures', fileNameProperty: 'realPath')]
     private $file;
 
+    #[Groups(["getByCityOrCountry"])]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $createdAt = null;
 

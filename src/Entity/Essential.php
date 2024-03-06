@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: EssentialRepository::class)]
 class Essential
@@ -14,26 +15,33 @@ class Essential
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(["getByCityOrCountry"])]
     private ?int $id = null;
 
+    #[Groups(["getByCityOrCountry"])]
     #[ORM\Column(length: 255)]
     private ?string $title = null;
 
+    #[Groups(["getByCityOrCountry"])]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
+    #[Groups(["getByCityOrCountry"])]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $updated_at = null;
 
+    #[Groups(["getByCityOrCountry"])]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $created_at = null;
 
     #[ORM\ManyToMany(targetEntity: geo::class, inversedBy: 'essentials')]
     private Collection $idGeo;
 
+    #[Groups(["getByCityOrCountry"])]
     #[ORM\Column(length: 24)]
     private ?string $status = null;
 
+    #[Groups(["getByCityOrCountry"])]
     #[ORM\OneToMany(mappedBy: 'essential', targetEntity: DownloadedFiles::class)]
     private Collection $images;
 

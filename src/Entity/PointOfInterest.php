@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: PointOfInterestRepository::class)]
 class PointOfInterest
@@ -14,29 +15,37 @@ class PointOfInterest
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(["getByCityOrCountry"])]
     private ?int $id = null;
 
+    #[Groups(["getByCityOrCountry"])]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
+    #[Groups(["getByCityOrCountry"])]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $link = null;
 
+    #[Groups(["getByCityOrCountry"])]
     #[ORM\Column]
     private ?float $price = null;
 
+    #[Groups(["getByCityOrCountry"])]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $updated_at = null;
 
+    #[Groups(["getByCityOrCountry"])]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $created_at = null;
 
     #[ORM\ManyToOne(inversedBy: 'pointOfInterests')]
     private ?geo $idGeo = null;
 
+    #[Groups(["getByCityOrCountry"])]
     #[ORM\ManyToMany(targetEntity: TypePointOfInterest::class, inversedBy: 'pointOfInterests')]
     private Collection $idIType;
 
+    #[Groups(["getByCityOrCountry"])]
     #[ORM\Column(length: 24)]
     private ?string $status = null;
 
@@ -46,6 +55,7 @@ class PointOfInterest
     #[ORM\OneToMany(mappedBy: 'pointOfInterest', targetEntity: DownloadedFiles::class)]
     private Collection $images;
 
+    #[Groups(["getByCityOrCountry"])]
     #[ORM\OneToMany(mappedBy: 'pointOfInterest', targetEntity: Personna::class)]
     private Collection $personnas;
 

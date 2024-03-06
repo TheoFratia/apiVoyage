@@ -16,11 +16,11 @@ class Geo
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(["getAllCountryAndCity"])]
+    #[Groups(["getAllCountryAndCity", "getByCityOrCountry"])]
     private ?int $id = null;
 
     #[ORM\Column(length: 124)]
-    #[Groups(["getAllCountryAndCity"])]
+    #[Groups(["getAllCountryAndCity", "getByCityOrCountry"])]
     #[Assert\Length(
         min: 2,
         max: 50,
@@ -30,33 +30,42 @@ class Geo
     private ?string $city = null;
 
     #[ORM\Column(length: 200)]
-    #[Groups(["getAllCountryAndCity"])]
+    #[Groups(["getAllCountryAndCity", "getByCityOrCountry"])]
     private ?string $country = null;
 
+    #[Groups(["getByCityOrCountry"])]
     #[ORM\Column(type: Types::TEXT)]
     private ?string $address = null;
 
+    #[Groups(["getByCityOrCountry"])]
     #[ORM\Column(type: Types::TEXT)]
     private ?string $longitude = null;
 
+    #[Groups(["getByCityOrCountry"])]
     #[ORM\Column(type: Types::TEXT)]
     private ?string $latitude = null;
 
+    #[Groups(["getByCityOrCountry"])]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $updated_at = null;
 
+    #[Groups(["getByCityOrCountry"])]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $created_at = null;
 
+    #[Groups(["getByCityOrCountry"])]
     #[ORM\Column(length: 24)]
     private ?string $status = null;
 
+    #[Groups(["getByCityOrCountry"])]
     #[ORM\ManyToMany(targetEntity: Essential::class, mappedBy: 'idGeo')]
     private Collection $essentials;
 
+    #[Groups(["getByCityOrCountry"])]
     #[ORM\ManyToMany(targetEntity: Info::class, mappedBy: 'idGeo')]
     private Collection $infos;
 
+    #[Groups(["getByCityOrCountry"])]
     #[ORM\OneToMany(mappedBy: 'idGeo', targetEntity: PointOfInterest::class)]
     private Collection $pointOfInterests;
 
