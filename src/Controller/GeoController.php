@@ -32,8 +32,7 @@ class GeoController extends AbstractController
     {
         $idcachegetAllCountryAndCity = "getAllCountryAndCityCache";
         $jsonGeo = $cache->get($idcachegetAllCountryAndCity, function(ItemInterface $item) use ($repository, $serializer){
-            echo "je suis passé par la";
-            $item->tag('Geo');
+            $item->tag('getAllCountryAndCityCache');
             $geos = $repository->findAll();
             return $serializer->serialize($geos, 'json', ['groups' => 'getAllCountryAndCity']);;
         });
@@ -96,40 +95,47 @@ class GeoController extends AbstractController
 
     #[Route('/api/geo/{geo}', name:"geo.update", methods: ['PUT'])]
     public function updateGeo(Geo $geo, Request $request, SerializerInterface $serializer, EntityManagerInterface $manager) {
-        $updateGeoData = $serializer->deserialize($request->getContent(), Geo::class, 'json');
-        if ($updateGeoData['active'] === true) {
-            $geo->setStatus('on');
-        }else {
-            $geo->setCity($updateGeoData->getCity());
-            $geo->setCountry($updateGeoData->getCountry());
-            $geo->setAddress($updateGeoData->getAddress());
-            $geo->setStatus($updateGeoData->getStatus());
-            $geo->setLatitude($updateGeoData->getLatitude());
-            $geo->setLongitude($updateGeoData->getLongitude());
         
+        $requestData = json_decode($request->getContent(), true);
+        if (isset($requestData['active']) && $requestData['active'] === true) {
+            $geo->setStatus('on');
+        } else {
+            // Désérialiser les données JSON pour obtenir les valeurs à mettre à jour
+            $updateGeoData = $serializer->deserialize($request->getContent(), Geo::class, 'json');
+            
+            // Vérifier si la propriété est définie dans les données JSON avant de la modifier
+            if (isset($requestData['city'])) {
+                $geo->setCity($updateGeoData->getCity());
+            }
+            if (isset($requestData['country'])) {
+                $geo->setCountry($updateGeoData->getCountry());
+            }
+            if (isset($requestData['address'])) {
+                $geo->setAddress($updateGeoData->getAddress());
+            }
+            if (isset($requestData['status'])) {
+                $geo->setStatus($updateGeoData->getStatus());
+            }
+            if (isset($requestData['latitude'])) {
+                $geo->setLatitude($updateGeoData->getLatitude());
+            }
+            if (isset($requestData['longitude'])) {
+                $geo->setLongitude($updateGeoData->getLongitude());
+            }
+            
             $date = new \DateTime();
             $geo->setUpdatedAt($date);
         }
-
-        $manager->persist($geo);
-        $manager->flush();
     
-        return new JsonResponse(null, JsonResponse::HTTP_NO_CONTENT);
-    }
-
-
-    #[Route('/api/geo/{geo}', name:"geo.update", methods: ['PUT'])]
-    public function activeGeo(Geo $geo, EntityManagerInterface $manager) {
-        $geo->setStatus("on");
-
         $manager->persist($geo);
         $manager->flush();
     
         return new JsonResponse(null, JsonResponse::HTTP_NO_CONTENT);
     }
     
-
     
+
+
     #[Route("/api/geo/{idGeo}", name:"geo.delete", methods:["DELETE"])]
     public function delete(Request $request, Geo $idGeo, EntityManagerInterface $manager): JsonResponse
     {
