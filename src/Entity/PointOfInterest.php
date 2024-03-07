@@ -15,47 +15,49 @@ class PointOfInterest
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(["getByCityOrCountry"])]
+    #[Groups(["getByCityOrCountry", "getAllPointOfInterest"])]
     private ?int $id = null;
 
-    #[Groups(["getByCityOrCountry"])]
+    #[Groups(["getByCityOrCountry", "getAllPointOfInterest"])]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
-    #[Groups(["getByCityOrCountry"])]
+    #[Groups(["getByCityOrCountry", "getAllPointOfInterest"])]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $link = null;
 
-    #[Groups(["getByCityOrCountry"])]
+    #[Groups(["getByCityOrCountry", "getAllPointOfInterest"])]
     #[ORM\Column]
     private ?float $price = null;
 
-    #[Groups(["getByCityOrCountry"])]
+    #[Groups(["getByCityOrCountry", "getAllPointOfInterest"])]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $updated_at = null;
 
-    #[Groups(["getByCityOrCountry"])]
+    #[Groups(["getByCityOrCountry", "getAllPointOfInterest"])]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $created_at = null;
 
+    #[Groups(["getAllPointOfInterest"])]
     #[ORM\ManyToOne(inversedBy: 'pointOfInterests')]
-    private ?geo $idGeo = null;
+    private geo $idGeo;
 
-    #[Groups(["getByCityOrCountry"])]
+    #[Groups(["getByCityOrCountry", "getAllPointOfInterest"])]
     #[ORM\ManyToMany(targetEntity: TypePointOfInterest::class, inversedBy: 'pointOfInterests')]
     private Collection $idIType;
 
-    #[Groups(["getByCityOrCountry"])]
+    #[Groups(["getByCityOrCountry", "getAllPointOfInterest"])]
     #[ORM\Column(length: 24)]
     private ?string $status = null;
 
     #[ORM\ManyToMany(targetEntity: Save::class, mappedBy: 'idPointOfInterest')]
     private Collection $saves;
 
+    #[Groups(["getAllPointOfInterest"])]
     #[ORM\OneToMany(mappedBy: 'pointOfInterest', targetEntity: DownloadedFiles::class)]
     private Collection $images;
 
-    #[Groups(["getByCityOrCountry"])]
+    #[Groups(["getByCityOrCountry", "getAllPointOfInterest"])]
     #[ORM\OneToMany(mappedBy: 'pointOfInterest', targetEntity: Personna::class)]
     private Collection $personnas;
 
