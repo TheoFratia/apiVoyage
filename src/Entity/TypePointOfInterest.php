@@ -15,14 +15,14 @@ class TypePointOfInterest
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(["getByCityOrCountry", "getAllTypePointOfInterest", "getAllPointOfInterest"])]
+    #[Groups(["getByCityOrCountry", "getAllTypePointOfInterest", "getAllPointOfInterest", "getAllSave"])]
     private ?int $id = null;
 
-    #[Groups(["getByCityOrCountry", "getAllTypePointOfInterest", "getAllPointOfInterest"])]
+    #[Groups(["getByCityOrCountry", "getAllTypePointOfInterest", "getAllPointOfInterest", "getAllSave"])]
     #[ORM\Column(type: Types::TEXT)]
     private ?string $type = null;
 
-    #[Groups(["getByCityOrCountry", "getAllTypePointOfInterest", "getAllPointOfInterest"])]
+    #[Groups(["getByCityOrCountry", "getAllTypePointOfInterest", "getAllPointOfInterest", "getAllSave"])]
     #[ORM\Column(length: 24)]
     private ?string $status = null;
 

@@ -15,49 +15,49 @@ class PointOfInterest
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(["getByCityOrCountry", "getAllPointOfInterest"])]
+    #[Groups(["getByCityOrCountry", "getAllPointOfInterest", "getAllSave"])]
     private ?int $id = null;
 
-    #[Groups(["getByCityOrCountry", "getAllPointOfInterest"])]
+    #[Groups(["getByCityOrCountry", "getAllPointOfInterest", "getAllSave"])]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
-    #[Groups(["getByCityOrCountry", "getAllPointOfInterest"])]
+    #[Groups(["getByCityOrCountry", "getAllPointOfInterest", "getAllSave"])]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $link = null;
 
-    #[Groups(["getByCityOrCountry", "getAllPointOfInterest"])]
+    #[Groups(["getByCityOrCountry", "getAllPointOfInterest", "getAllSave"])]
     #[ORM\Column]
     private ?float $price = null;
 
-    #[Groups(["getByCityOrCountry", "getAllPointOfInterest"])]
+    #[Groups(["getByCityOrCountry", "getAllPointOfInterest", "getAllSave"])]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $updated_at = null;
 
-    #[Groups(["getByCityOrCountry", "getAllPointOfInterest"])]
+    #[Groups(["getByCityOrCountry", "getAllPointOfInterest", "getAllSave"])]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $created_at = null;
 
-    #[Groups(["getAllPointOfInterest"])]
+    #[Groups(["getAllPointOfInterest", "getAllSave"])]
     #[ORM\ManyToOne(inversedBy: 'pointOfInterests')]
     private geo $idGeo;
 
-    #[Groups(["getByCityOrCountry", "getAllPointOfInterest"])]
+    #[Groups(["getByCityOrCountry", "getAllPointOfInterest", "getAllSave"])]
     #[ORM\ManyToMany(targetEntity: TypePointOfInterest::class, inversedBy: 'pointOfInterests')]
     private Collection $idIType;
 
-    #[Groups(["getByCityOrCountry", "getAllPointOfInterest"])]
+    #[Groups(["getByCityOrCountry", "getAllPointOfInterest", "getAllSave"])]
     #[ORM\Column(length: 24)]
     private ?string $status = null;
 
     #[ORM\ManyToMany(targetEntity: Save::class, mappedBy: 'idPointOfInterest')]
     private Collection $saves;
 
-    #[Groups(["getAllPointOfInterest"])]
+    #[Groups(["getAllPointOfInterest", "getAllSave"])]
     #[ORM\OneToMany(mappedBy: 'pointOfInterest', targetEntity: DownloadedFiles::class)]
     private Collection $images;
 
-    #[Groups(["getByCityOrCountry", "getAllPointOfInterest"])]
+    #[Groups(["getByCityOrCountry", "getAllPointOfInterest", "getAllSave"])]
     #[ORM\OneToMany(mappedBy: 'pointOfInterest', targetEntity: Personna::class)]
     private Collection $personnas;
 

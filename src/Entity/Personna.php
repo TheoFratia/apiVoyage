@@ -13,34 +13,34 @@ class Personna
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(["getByCityOrCountry", "getAllPointOfInterest"])]
+    #[Groups(["getByCityOrCountry", "getAllPointOfInterest", "getAllSave"])]
     private ?int $id = null;
 
-    #[Groups(["getByCityOrCountry", "getAllPointOfInterest"])]
+    #[Groups(["getByCityOrCountry", "getAllPointOfInterest", "getAllSave"])]
     #[ORM\Column(length: 200)]
     private ?string $name = null;
 
-    #[Groups(["getByCityOrCountry", "getAllPointOfInterest"])]
+    #[Groups(["getByCityOrCountry", "getAllPointOfInterest", "getAllSave"])]
     #[ORM\Column(length: 200)]
     private ?string $firstName = null;
 
-    #[Groups(["getByCityOrCountry", "getAllPointOfInterest"])]
+    #[Groups(["getByCityOrCountry", "getAllPointOfInterest", "getAllSave"])]
     #[ORM\Column(length: 255)]
     private ?string $email = null;
 
-    #[Groups(["getByCityOrCountry", "getAllPointOfInterest"])]
+    #[Groups(["getByCityOrCountry", "getAllPointOfInterest", "getAllSave"])]
     #[ORM\Column(length: 48)]
     private ?string $phone = null;
 
-    #[Groups(["getByCityOrCountry", "getAllPointOfInterest"])]
+    #[Groups(["getByCityOrCountry", "getAllPointOfInterest", "getAllSave"])]
     #[ORM\Column(length: 24)]
     private ?string $gender = null;
 
-    #[Groups(["getByCityOrCountry", "getAllPointOfInterest"])]
+    #[Groups(["getByCityOrCountry", "getAllPointOfInterest", "getAllSave"])]
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $Birthday = null;
 
-    #[Groups(["getByCityOrCountry", "getAllPointOfInterest"])]
+    #[Groups(["getByCityOrCountry", "getAllPointOfInterest", "getAllSave"])]
     #[ORM\Column(length: 255)]
     private ?string $address = null;
 

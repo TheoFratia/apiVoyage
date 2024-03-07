@@ -16,11 +16,11 @@ class Geo
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(["getAllCountryAndCity", "getByCityOrCountry", "getAllInfo", "getAllEssential", "getAllPointOfInterest"])]
+    #[Groups(["getAllCountryAndCity", "getByCityOrCountry", "getAllInfo", "getAllEssential", "getAllPointOfInterest", "getAllSave"])]
     private ?int $id = null;
 
     #[ORM\Column(length: 124)]
-    #[Groups(["getAllCountryAndCity", "getByCityOrCountry", "getAllInfo", "getAllEssential", "getAllPointOfInterest"])]
+    #[Groups(["getAllCountryAndCity", "getByCityOrCountry", "getAllInfo", "getAllEssential", "getAllPointOfInterest", "getAllSave"])]
     #[Assert\Length(
         min: 2,
         max: 50,
@@ -30,30 +30,30 @@ class Geo
     private ?string $city = null;
 
     #[ORM\Column(length: 200)]
-    #[Groups(["getAllCountryAndCity", "getByCityOrCountry", "getAllInfo", "getAllEssential", "getAllPointOfInterest"])]
+    #[Groups(["getAllCountryAndCity", "getByCityOrCountry", "getAllInfo", "getAllEssential", "getAllPointOfInterest", "getAllSave"])]
     private ?string $country = null;
 
-    #[Groups(["getByCityOrCountry", "getAllInfo", "getAllEssential", "getAllPointOfInterest"])]
+    #[Groups(["getByCityOrCountry", "getAllInfo", "getAllEssential", "getAllPointOfInterest", "getAllSave"])]
     #[ORM\Column(type: Types::TEXT)]
     private ?string $address = null;
 
-    #[Groups(["getByCityOrCountry", "getAllInfo", "getAllEssential", "getAllPointOfInterest"])]
+    #[Groups(["getByCityOrCountry", "getAllInfo", "getAllEssential", "getAllPointOfInterest", "getAllSave"])]
     #[ORM\Column(type: Types::TEXT)]
     private ?string $longitude = null;
 
-    #[Groups(["getByCityOrCountry", "getAllInfo", "getAllEssential", "getAllPointOfInterest"])]
+    #[Groups(["getByCityOrCountry", "getAllInfo", "getAllEssential", "getAllPointOfInterest", "getAllSave"])]
     #[ORM\Column(type: Types::TEXT)]
     private ?string $latitude = null;
 
-    #[Groups(["getByCityOrCountry", "getAllInfo", "getAllEssential", "getAllPointOfInterest"])]
+    #[Groups(["getByCityOrCountry", "getAllInfo", "getAllEssential", "getAllPointOfInterest", "getAllSave"])]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $updated_at = null;
 
-    #[Groups(["getByCityOrCountry", "getAllInfo", "getAllEssential", "getAllPointOfInterest"])]
+    #[Groups(["getByCityOrCountry", "getAllInfo", "getAllEssential", "getAllPointOfInterest", "getAllSave"])]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $created_at = null;
 
-    #[Groups(["getByCityOrCountry", "getAllInfo", "getAllEssential", "getAllPointOfInterest"])]
+    #[Groups(["getByCityOrCountry", "getAllInfo", "getAllEssential", "getAllPointOfInterest", "getAllSave"])]
     #[ORM\Column(length: 24)]
     private ?string $status = null;
 
