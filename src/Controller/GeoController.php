@@ -141,7 +141,7 @@ class GeoController extends AbstractController
     {
         $data = json_decode($request->getContent(), true);
 
-        if ($data['force'] === true) {
+        if (isset($data['force']) && $data['force'] === true) {
             $manager->remove($idGeo);
         } else {
             $idGeo->setStatus('off');

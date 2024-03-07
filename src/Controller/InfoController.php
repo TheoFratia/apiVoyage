@@ -34,7 +34,7 @@ class InfoController extends AbstractController
         $jsonInfo = $cache->get($idcachegetAllInfo, function(ItemInterface $item) use ($repository, $serializer){
             $item->tag('getAllInfo');
             $infos = $repository->findAll();
-            return $serializer->serialize($infos, 'json', ['groups' => 'getByCityOrCountry']);
+            return $serializer->serialize($infos, 'json', ['groups' => 'getAllInfo']);
         });
         
         dd($jsonInfo);
@@ -44,7 +44,7 @@ class InfoController extends AbstractController
 
     #[Route("/api/info/{info}", name: "info.get", methods: ["GET"])]
     public function getInfo(Info $info, SerializerInterface $serializer): JsonResponse {
-        $jsonInfo = $serializer->serialize($info, 'json', ['groups' => 'getByCityOrCountry']);
+        $jsonInfo = $serializer->serialize($info, 'json', ['groups' => 'getAllInfo']);
         return new JsonResponse($jsonInfo, 200, [], true);
     }
 
@@ -69,14 +69,14 @@ class InfoController extends AbstractController
 
         $manager->persist($info);
         $manager->flush();
-        $cache->invalidateTags(['getAllCountryAndCityCache']);
-        $jsonInfo = $serializer->serialize($info, 'json', ['groups' => 'getByCityOrCountry']);
+        $cache->invalidateTags(['getAllInfo']);
+        $jsonInfo = $serializer->serialize($info, 'json', ['groups' => 'getAllInfo']);
         $location = $urlGenerator->generate('info.getAll', ['idInfo' => $info->getId(), UrlGeneratorInterface::ABSOLUTE_URL]);
         return new JsonResponse($jsonInfo, JsonResponse::HTTP_CREATED, ["Location" => $location], true);
     }
 
     #[Route('/api/info/{info}', name:"info.update", methods: ['PUT'])]
-    public function updateInfo(Info $info, Request $request, SerializerInterface $serializer, EntityManagerInterface $manager): JsonResponse
+    public function updateInfo(Info $info, Request $request, SerializerInterface $serializer, TagAwareCacheInterface $cache, EntityManagerInterface $manager): JsonResponse
     {
         $active = json_decode($request->getContent(), true);
 
@@ -84,13 +84,11 @@ class InfoController extends AbstractController
             $info->setStatus('on');
         } else {
             $updateInfoData = $serializer->deserialize($request->getContent(), Info::class, 'json', [AbstractNormalizer::OBJECT_TO_POPULATE => $info]);
-            
-            // Vérifier si la propriété est initialisée avant de l'utiliser
+
             if (isset($updateInfoData->description)) {
                 $info->setDescription($updateInfoData->description);
             }
 
-            // Vérifier si la propriété est initialisée avant de l'utiliser
             if (isset($updateInfoData->idTypeInfo)) {
                 $info->setIdTypeInfo($updateInfoData->idTypeInfo);
             }
@@ -99,6 +97,7 @@ class InfoController extends AbstractController
             $info->setUpdatedAt($date);
         }
 
+        $cache->invalidateTags(['getAllInfo']);
         $manager->persist($info);
         $manager->flush();
 
@@ -113,7 +112,7 @@ class InfoController extends AbstractController
     {
         $data = json_decode($request->getContent(), true);
 
-        if ($data['force'] === true) {
+        if (isset($data['force']) && $data['force'] === true) {
             $manager->remove($idInfo);
         } else {
             $idInfo->setStatus('off');

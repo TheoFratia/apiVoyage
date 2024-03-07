@@ -15,33 +15,34 @@ class Essential
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(["getByCityOrCountry"])]
+    #[Groups(["getByCityOrCountry", "getAllEssential"])]
     private ?int $id = null;
 
-    #[Groups(["getByCityOrCountry"])]
+    #[Groups(["getByCityOrCountry", "getAllEssential"])]
     #[ORM\Column(length: 255)]
     private ?string $title = null;
 
-    #[Groups(["getByCityOrCountry"])]
+    #[Groups(["getByCityOrCountry", "getAllEssential"])]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
-    #[Groups(["getByCityOrCountry"])]
+    #[Groups(["getByCityOrCountry", "getAllEssential"])]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $updated_at = null;
 
-    #[Groups(["getByCityOrCountry"])]
+    #[Groups(["getByCityOrCountry", "getAllEssential"])]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $created_at = null;
 
+    #[Groups(["getAllEssential"])]
     #[ORM\ManyToMany(targetEntity: geo::class, inversedBy: 'essentials')]
     private Collection $idGeo;
 
-    #[Groups(["getByCityOrCountry"])]
+    #[Groups(["getByCityOrCountry", "getAllEssential"])]
     #[ORM\Column(length: 24)]
     private ?string $status = null;
 
-    #[Groups(["getByCityOrCountry"])]
+    #[Groups(["getByCityOrCountry", "getAllEssential"])]
     #[ORM\OneToMany(mappedBy: 'essential', targetEntity: DownloadedFiles::class)]
     private Collection $images;
 

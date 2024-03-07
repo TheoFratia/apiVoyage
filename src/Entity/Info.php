@@ -15,33 +15,34 @@ class Info
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(["getByCityOrCountry"])]
+    #[Groups(["getByCityOrCountry", "getAllInfo"])]
     private ?int $id = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups(["getByCityOrCountry"])]
+    #[Groups(["getByCityOrCountry", "getAllInfo"])]
     private ?string $description = null;
 
+    #[Groups(["getAllInfo"])]
     #[ORM\ManyToMany(targetEntity: geo::class, inversedBy: 'infos')]
     private Collection $idGeo;
 
-    #[Groups(["getByCityOrCountry"])]
+    #[Groups(["getByCityOrCountry", "getAllInfo"])]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $updated_at = null;
 
-    #[Groups(["getByCityOrCountry"])]
+    #[Groups(["getByCityOrCountry", "getAllInfo"])]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $created_at = null;
 
-    #[Groups(["getByCityOrCountry"])]
+    #[Groups(["getByCityOrCountry", "getAllInfo"])]
     #[ORM\Column(length: 24)]
     private ?string $status = null;
 
-    #[Groups(["getByCityOrCountry"])]
+    #[Groups(["getByCityOrCountry", "getAllInfo"])]
     #[ORM\ManyToOne(inversedBy: 'infos')]
     private TypeInfo $idTypeInfo;
 
-    #[Groups(["getByCityOrCountry"])]
+    #[Groups(["getByCityOrCountry", "getAllInfo"])]
     #[ORM\OneToMany(mappedBy: 'info', targetEntity: DownloadedFiles::class)]
     private Collection $images;
 

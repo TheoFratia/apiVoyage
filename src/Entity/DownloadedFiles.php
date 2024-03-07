@@ -16,42 +16,42 @@ class DownloadedFiles
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(["getByCityOrCountry"])]
+    #[Groups(["getByCityOrCountry", "getAllInfo", "getAllEssential"])]
     private ?int $id = null;
 
-    #[Groups(["getByCityOrCountry"])]
+    #[Groups(["getByCityOrCountry", "getAllInfo", "getAllEssential"])]
     #[ORM\Column(length: 255)]
     private ?string $realName = null;
 
-    #[Groups(["getByCityOrCountry"])]
+    #[Groups(["getByCityOrCountry", "getAllInfo", "getAllEssential"])]
     #[ORM\Column(length: 255)]
     private ?string $realPath = null;
 
-    #[Groups(["getByCityOrCountry"])]
+    #[Groups(["getByCityOrCountry", "getAllInfo", "getAllEssential"])]
     #[ORM\Column(length: 255)]
     private ?string $publicPath = null;
 
-    #[Groups(["getByCityOrCountry"])]
+    #[Groups(["getByCityOrCountry", "getAllInfo", "getAllEssential"])]
     #[ORM\Column(length: 255)]
     private ?string $mimeType = null;
 
-    #[Groups(["getByCityOrCountry"])]
+    #[Groups(["getByCityOrCountry", "getAllInfo", "getAllEssential"])]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[Groups(["getByCityOrCountry"])]
+    #[Groups(["getByCityOrCountry", "getAllInfo", "getAllEssential"])]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $updatedAt = null;
 
-    #[Groups(["getByCityOrCountry"])]
+    #[Groups(["getByCityOrCountry", "getAllInfo", "getAllEssential"])]
     #[ORM\Column(length: 24)]
     private ?string $status = null;
 
-    #[Groups(["getByCityOrCountry"])]
+    #[Groups(["getByCityOrCountry", "getAllInfo", "getAllEssential"])]
     #[Vich\UploadableField(mapping: 'pictures', fileNameProperty: 'realPath')]
     private $file;
 
-    #[Groups(["getByCityOrCountry"])]
+    #[Groups(["getByCityOrCountry", "getAllInfo", "getAllEssential"])]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $createdAt = null;
 
