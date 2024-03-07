@@ -36,8 +36,7 @@ class PointofinterestController extends AbstractController
             $PointOfInterests = $repository->findAll();
             return $serializer->serialize($PointOfInterests, 'json', ['groups' => 'getAllPointOfInterest']);
         });
-        
-        dd($jsonPointOfInterest);
+
         return new JsonResponse($jsonPointOfInterest, 200, [], true);
     }
 

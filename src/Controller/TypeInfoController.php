@@ -28,7 +28,7 @@ class TypeInfoController extends AbstractController
     }
 
     #[Route('/api/type/info', name: 'typeinfo.getAll', methods: ['GET'])]
-    public function getAllCountryAndCityCache(TypeInfoRepository $repository, SerializerInterface $serializer, TagAwareCacheInterface $cache): JsonResponse
+    public function getAllTypeInfoCache(TypeInfoRepository $repository, SerializerInterface $serializer, TagAwareCacheInterface $cache): JsonResponse
     {
         $idcachegetAllTypeInfo = "getAllTypeInfo";
         $jsonTypeInfo = $cache->get($idcachegetAllTypeInfo, function(ItemInterface $item) use ($repository, $serializer){
@@ -37,7 +37,6 @@ class TypeInfoController extends AbstractController
             return $serializer->serialize($typeInfos, 'json', ['groups' => 'getAllTypeInfo']);
         });
         
-        dd($jsonTypeInfo);
         return new JsonResponse($jsonTypeInfo, 200, [], true);
     }
 

@@ -37,7 +37,6 @@ class GeoController extends AbstractController
             return $serializer->serialize($geos, 'json', ['groups' => 'getAllCountryAndCity']);;
         });
         
-        dd($jsonGeo);
         return new JsonResponse($jsonGeo, 200, [], true);
     }
 

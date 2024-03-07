@@ -37,7 +37,6 @@ class EssentialController extends AbstractController
             return $serializer->serialize($essentials, 'json', ['groups' => 'getAllEssential']);
         });
         
-        dd($jsonEssential);
         return new JsonResponse($jsonEssential, 200, [], true);
     }
 

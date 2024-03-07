@@ -36,8 +36,7 @@ class InfoController extends AbstractController
             $infos = $repository->findAll();
             return $serializer->serialize($infos, 'json', ['groups' => 'getAllInfo']);
         });
-        
-        dd($jsonInfo);
+
         return new JsonResponse($jsonInfo, 200, [], true);
     }
 

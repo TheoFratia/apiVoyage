@@ -37,8 +37,7 @@ class SaveController extends AbstractController
             $saves = $repository->findAll();
             return $serializer->serialize($saves, 'json', ['groups' => 'getAllSave']);
         });
-        
-        dd($jsonSave);
+
         return new JsonResponse($jsonSave, 200, [], true);
     }
 

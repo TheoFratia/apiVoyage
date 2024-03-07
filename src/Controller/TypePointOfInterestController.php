@@ -37,7 +37,6 @@ class TypePointOfInterestController extends AbstractController
             return $serializer->serialize($typePointOfInterests, 'json', ['groups' => 'getAllTypePointOfInterest']);
         });
         
-        dd($jsonTypePointOfInterest);
         return new JsonResponse($jsonTypePointOfInterest, 200, [], true);
     }
 
