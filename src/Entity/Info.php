@@ -22,7 +22,7 @@ class Info
     #[Groups(["getByCityOrCountry", "getAllInfo"])]
     private ?string $description = null;
 
-    #[Groups(["getAllInfo"])]
+    #[Groups(["getByCityOrCountry", "getAllInfo"])]
     #[ORM\ManyToMany(targetEntity: geo::class, inversedBy: 'infos')]
     private Collection $idGeo;
 
