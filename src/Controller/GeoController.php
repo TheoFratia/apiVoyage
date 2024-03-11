@@ -27,18 +27,41 @@ class GeoController extends AbstractController
         ]);
     }
 
-    #[Route('/api/geo', name: 'geo.get', methods: ['GET'])]
-    public function getAllCountryAndCityCache(GeoRepository $repository, SerializerInterface $serializer, TagAwareCacheInterface $cache): JsonResponse
-    {
-        $idcachegetAllCountryAndCity = "getAllCountryAndCityCache";
-        $jsonGeo = $cache->get($idcachegetAllCountryAndCity, function(ItemInterface $item) use ($repository, $serializer){
-            $item->tag('getAllCountryAndCityCache');
-            $geos = $repository->findAll();
-            return $serializer->serialize($geos, 'json', ['groups' => 'getAllCountryAndCity']);;
-        });
-        
-        return new JsonResponse($jsonGeo, 200, [], true);
-    }
+
+#[Route('/api/geo', name: 'geo.get', methods: ['GET'])]
+public function getAllCountryAndCityCache(GeoRepository $repository, SerializerInterface $serializer, TagAwareCacheInterface $cache): JsonResponse
+{
+    $idcachegetAllCountryAndCity = "getAllCountryAndCityCache";
+    $jsonGeo = $cache->get($idcachegetAllCountryAndCity, function(ItemInterface $item) use ($repository, $serializer){
+        $item->tag('getAllCountryAndCityCache');
+        $geos = $repository->findAll();
+        $uniqueCountries = [];
+        $uniqueCities = [];
+
+        foreach ($geos as $geo) {
+            // Vérifier si le pays est déjà présent dans le tableau uniqueCountries
+            if (!in_array($geo->getCountry(), $uniqueCountries)) {
+                $uniqueCountries[] = $geo->getCountry();
+            }
+
+            // Vérifier si la ville est déjà présente dans le tableau uniqueCities
+            if (!in_array($geo->getCity(), $uniqueCities)) {
+                $uniqueCities[] = $geo->getCity();
+            }
+        }
+
+        // Construction du tableau de résultat
+        $result = [
+            'countries' => $uniqueCountries,
+            'cities' => $uniqueCities
+        ];
+
+        return $serializer->serialize($result, 'json', ['groups' => 'getAllCountryAndCity']);
+    });
+    
+    return new JsonResponse($jsonGeo, 200, [], true);
+}
+
 
 
     #[Route("/api/geo/{geo}", name: "geo.getBy", methods: ["GET"])]
