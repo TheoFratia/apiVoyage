@@ -144,6 +144,9 @@ public function getAllCountryAndCityCache(GeoRepository $repository, SerializerI
             if (isset($requestData['longitude'])) {
                 $geo->setLongitude($updateGeoData->getLongitude());
             }
+            if (isset($requestData['zip_code'])) {
+                $geo->setUpdatedAt($updateGeoData->getZipCode());
+            }
             
             $date = new \DateTime();
             $geo->setUpdatedAt($date);

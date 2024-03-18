@@ -92,6 +92,10 @@ class InfoController extends AbstractController
                 $info->setIdTypeInfo($updateInfoData->idTypeInfo);
             }
 
+            if (isset($updateInfoData->titre)) {
+                $info->setTitre($updateInfoData->titre);
+            }
+
             $date = new \DateTime();
             $info->setUpdatedAt($date);
         }

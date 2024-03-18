@@ -91,6 +91,9 @@ class PointofinterestController extends AbstractController
             if (isset($updatePointOfInterestData->price)) {
                 $PointOfInterest->setPrice($updatePointOfInterestData->price);
             }
+            if(isset($updatePointOfInterestData->titre)){
+                $PointOfInterest->setTitre($updatePointOfInterestData->titre);
+            }
             $PointOfInterest->setUpdatedAt(new \DateTime());
         }
 

@@ -61,6 +61,10 @@ class PointOfInterest
     #[ORM\OneToMany(mappedBy: 'pointOfInterest', targetEntity: Personna::class)]
     private Collection $personnas;
 
+    #[Groups(["getByCityOrCountry", "getAllPointOfInterest", "getAllSave"])]
+    #[ORM\Column(length: 255)]
+    private ?string $titre = null;
+
     public function __construct()
     {
         $this->idIType = new ArrayCollection();
@@ -265,6 +269,18 @@ class PointOfInterest
                 $personna->setPointOfInterest(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getTitre(): ?string
+    {
+        return $this->titre;
+    }
+
+    public function setTitre(string $titre): static
+    {
+        $this->titre = $titre;
 
         return $this;
     }

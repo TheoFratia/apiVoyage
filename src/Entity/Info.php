@@ -46,6 +46,10 @@ class Info
     #[ORM\OneToMany(mappedBy: 'info', targetEntity: DownloadedFiles::class)]
     private Collection $images;
 
+    #[Groups(["getByCityOrCountry", "getAllInfo"])]
+    #[ORM\Column(length: 255)]
+    private ?string $titre = null;
+
     public function __construct()
     {
         $this->idGeo = new ArrayCollection();
@@ -167,6 +171,18 @@ class Info
                 $image->setInfo(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getTitre(): ?string
+    {
+        return $this->titre;
+    }
+
+    public function setTitre(string $titre): static
+    {
+        $this->titre = $titre;
 
         return $this;
     }

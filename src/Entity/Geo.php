@@ -72,6 +72,10 @@ class Geo
     #[ORM\OneToMany(mappedBy: 'idGeo', targetEntity: Save::class)]
     private Collection $saves;
 
+    #[Groups(["getByCityOrCountry", "getAllInfo", "getAllEssential", "getAllPointOfInterest", "getAllSave"])]
+    #[ORM\Column(length: 24)]
+    private ?string $zipCode = null;
+
     public function __construct()
     {
         $this->essentials = new ArrayCollection();
@@ -291,6 +295,18 @@ class Geo
                 $save->setIdGeo(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getZipCode(): ?string
+    {
+        return $this->zipCode;
+    }
+
+    public function setZipCode(string $zipCode): static
+    {
+        $this->zipCode = $zipCode;
 
         return $this;
     }

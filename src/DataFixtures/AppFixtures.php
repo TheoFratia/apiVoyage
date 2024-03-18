@@ -92,51 +92,50 @@ class AppFixtures extends Fixture
             array_push($allGeo, $geo);
 
             // Create PointOfInterest entities
-            $pointOfInterest = new PointOfInterest();
-            $pointOfInterest->setDescription($this->faker->text());
-            $pointOfInterest->setLink($this->faker->url());
-            $pointOfInterest->setPrice($this->faker->randomFloat(2, 0, 100));
-            $pointOfInterest->setUpdatedAt(new \DateTime());
-            $pointOfInterest->setCreatedAt(new \DateTime());
-            $pointOfInterest->setIdGeo($geo);
-            $pointOfInterest->setStatus('on');
-            array_push($allPointOfInterest, $pointOfInterest);
+            // $pointOfInterest = new PointOfInterest();
+            // $pointOfInterest->setDescription($this->faker->text());
+            // $pointOfInterest->setLink($this->faker->url());
+            // $pointOfInterest->setPrice($this->faker->randomFloat(2, 0, 100));
+            // $pointOfInterest->setUpdatedAt(new \DateTime());
+            // $pointOfInterest->setCreatedAt(new \DateTime());
+            // $pointOfInterest->setIdGeo($geo);
+            // $pointOfInterest->setStatus('on');
+            // array_push($allPointOfInterest, $pointOfInterest);
 
             // Create TypePointOfInterest entities and associate with PointOfInterest
-            $typePointOfInterest = new TypePointOfInterest();
-            $typePointOfInterest->setType($this->faker->word());
-            $typePointOfInterest->setStatus('on');
-            $manager->persist($typePointOfInterest);
-            $pointOfInterest->addIdIType($typePointOfInterest);
-            $manager->persist($pointOfInterest);
+            // $typePointOfInterest = new TypePointOfInterest();
+            // $typePointOfInterest->setType($this->faker->word());
+            // $typePointOfInterest->setStatus('on');
+            // $manager->persist($typePointOfInterest);
+            // $pointOfInterest->addIdIType($typePointOfInterest);
+            // $manager->persist($pointOfInterest);
 
-            // Create TypeInfo entities and associate with Info
-            $typeInfo = new TypeInfo();
-            $typeInfo->setType($this->faker->word());
-            $typeInfo->setStatus('on');
-            $manager->persist($typeInfo);
-            array_push($allTypeInfo, $typeInfo);
+            // $typeInfo = new TypeInfo();
+            // $typeInfo->setType($this->faker->word());
+            // $typeInfo->setStatus('on');
+            // $manager->persist($typeInfo);
+            // array_push($allTypeInfo, $typeInfo);
 
             // Create Info entities
-            $info = new Info();
-            $info->setDescription($this->faker->text());
-            $info->setUpdatedAt(new \DateTime());
-            $info->setCreatedAt(new \DateTime());
-            $info->setStatus('on');
-            $typeInfo = $allTypeInfo[array_rand($allTypeInfo)];
-            $info->setIdTypeInfo($typeInfo);
-            $geo = $allGeo[array_rand($allGeo)];
-            $info->addIdGeo($geo);
-            $manager->persist($info);
+            // $info = new Info();
+            // $info->setDescription($this->faker->text());
+            // $info->setUpdatedAt(new \DateTime());
+            // $info->setCreatedAt(new \DateTime());
+            // $info->setStatus('on');
+            // $typeInfo = $allTypeInfo[array_rand($allTypeInfo)];
+            // $info->setIdTypeInfo($typeInfo);
+            // $geo = $allGeo[array_rand($allGeo)];
+            // $info->addIdGeo($geo);
+            // $manager->persist($info);
 
-            $save = new Save();
-            $numPointOfInterestsToAssociate = random_int(0, count($allPointOfInterest) -1);
-            for ($j = 0; $j < $numPointOfInterestsToAssociate; $j++) {
-                $pointOfInterest = $allPointOfInterest[array_rand($allPointOfInterest)];
-                $save->addIdPointOfInterest($pointOfInterest);
-            }
-            $save->setIdGeo($geo);
-            $manager->persist($save);
+            // $save = new Save();
+            // $numPointOfInterestsToAssociate = random_int(0, count($allPointOfInterest) -1);
+            // for ($j = 0; $j < $numPointOfInterestsToAssociate; $j++) {
+            //     $pointOfInterest = $allPointOfInterest[array_rand($allPointOfInterest)];
+            //     $save->addIdPointOfInterest($pointOfInterest);
+            // }
+            // $save->setIdGeo($geo);
+            // $manager->persist($save);
 
             $essential = new Essential();
             $essential->setTitle($faker->word());
@@ -176,9 +175,9 @@ class AppFixtures extends Fixture
             $manager->persist($downloadedFiles);
 
             // Associate Personna with PointOfInterest
-            $pointOfInterest = $allPointOfInterest[array_rand($allPointOfInterest)];
-            $personna->setPointOfInterest($pointOfInterest);
-            $pointOfInterest->addPersonna($personna);
+            //$pointOfInterest = $allPointOfInterest[array_rand($allPointOfInterest)];
+            //$personna->setPointOfInterest($pointOfInterest);
+            //$pointOfInterest->addPersonna($personna);
 
             // Associate User and Personna entities
             $user = $allUser[array_rand($allUser)];
