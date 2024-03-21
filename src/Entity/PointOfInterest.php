@@ -53,11 +53,12 @@ class PointOfInterest
     #[ORM\ManyToMany(targetEntity: Save::class, mappedBy: 'idPointOfInterest')]
     private Collection $saves;
 
-    #[Groups(["getAllPointOfInterest", "getAllSave"])]
+    #[Groups(["getAllPointOfInterest", "getAllSave", "getByCityOrCountry"])]
     #[ORM\OneToMany(mappedBy: 'pointOfInterest', targetEntity: DownloadedFiles::class)]
     private Collection $images;
 
-    #[Groups(["getByCityOrCountry", "getAllPointOfInterest", "getAllSave"])]
+    //"getByCityOrCountry"
+    #[Groups(["getAllPointOfInterest", "getAllSave"])]
     #[ORM\OneToMany(mappedBy: 'pointOfInterest', targetEntity: Personna::class)]
     private Collection $personnas;
 

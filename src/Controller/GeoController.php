@@ -66,26 +66,16 @@ public function getAllCountryAndCityCache(GeoRepository $repository, SerializerI
 
     #[Route("/api/geo/{geo}", name: "geo.getBy", methods: ["GET"])]
     public function getByCity(string $geo, GeoRepository $repository, SerializerInterface $serializer, TagAwareCacheInterface $cache): JsonResponse {
-        $cacheId = 'getBy';
-        $jsonGeo = $cache->get($cacheId, function (ItemInterface $item) use ($geo, $repository, $serializer) {
-            $item->tag('getBy');
             $theCity = $repository->findByCity($geo);
             $theCountry = $repository->findByCountry($geo);
             if (empty($theCity) && empty($theCountry)) {
-                return null;
+                return new JsonResponse('Aucun resultat pour "' . $geo . '"', 404);
             } elseif (empty($theCountry)) {
                 $geos = $theCity;
             } else {
                 $geos = $theCountry;
             }
-            return $serializer->serialize($geos, 'json', ['groups' => 'getByCityOrCountry']);
-        });
-
-        if (is_null($jsonGeo)) {
-            return new JsonResponse('Aucun resultat pour "' . $geo . '"', 404);
-        }
-
-        return new JsonResponse($jsonGeo, 200, [], true);
+            return new JsonResponse($serializer->serialize($geos, 'json', ['groups' => 'getByCityOrCountry']), 200, [], true);
     }
 
 

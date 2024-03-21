@@ -57,11 +57,11 @@ class Geo
     #[ORM\Column(length: 24)]
     private ?string $status = null;
 
-    #[Groups(["getByCityOrCountry"])]
+    //#[Groups(["getByCityOrCountry"])]
     #[ORM\ManyToMany(targetEntity: Essential::class, mappedBy: 'idGeo')]
     private Collection $essentials;
 
-    #[Groups(["getByCityOrCountry"])]
+    //#[Groups(["getByCityOrCountry"])]
     #[ORM\ManyToMany(targetEntity: Info::class, mappedBy: 'idGeo')]
     private Collection $infos;
 
