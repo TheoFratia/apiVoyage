@@ -15,10 +15,17 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Ramsey\Uuid\Uuid;
-use Ramsey\Uuid\Guid\Guid;
+use Symfony\Component\Security\Core\Security;
 
 class UserController extends AbstractController
 {
+    private Security $security;
+
+    public function __construct(Security $security)
+    {
+        $this->security = $security;
+    }
+
     #[Route('/user', name: 'app_user')]
     public function index(): Response
     {
@@ -58,5 +65,43 @@ class UserController extends AbstractController
 
 
         return $this->json($user, 201);
+    }
+
+
+    #[Route('/api/user', name: 'api_user', methods: ['GET'])]
+    public function fetchUser(): JsonResponse
+    {
+        $user = $this->security->getUser();
+
+        if (!$user) {
+            return new JsonResponse(['message' => 'Aucun utilisateur n\'est connecté.'], JsonResponse::HTTP_UNAUTHORIZED);
+        }
+
+        $userData = [
+            'id' => $user->getUserIdentifier(),
+            'roles' => $user->getRoles(),
+        ];
+
+        return new JsonResponse($userData);
+    }
+
+
+
+    #[Route('/api/user/{uuid}', name: 'api_user_info', methods: ['GET'])]
+    public function getUserInfo(User $user): JsonResponse
+    {
+        $con = $this->security->getUser();
+        if (!$con) {
+            return new JsonResponse(['message' => 'Aucun utilisateur n\'est connecté.'], JsonResponse::HTTP_UNAUTHORIZED);
+        }
+
+        $userData = [
+            'uuid' => $user->getUuid(),
+            'username' => $user->getUsername(),
+            'roles' => $user->getRoles(),
+            'personna'=> $user->getPersonnas(),
+        ];
+
+        return $this->json($userData);
     }
 }
