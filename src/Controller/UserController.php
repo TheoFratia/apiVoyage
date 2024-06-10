@@ -80,6 +80,7 @@ class UserController extends AbstractController
         $userData = [
             'id' => $user->getUserIdentifier(),
             'roles' => $user->getRoles(),
+            'avatarId' => $user->getAvatarId(),
         ];
 
         return new JsonResponse($userData);
@@ -100,8 +101,36 @@ class UserController extends AbstractController
             'username' => $user->getUsername(),
             'roles' => $user->getRoles(),
             'personna'=> $user->getPersonnas(),
+            'avatarId' => $user->getAvatarId(),
         ];
 
         return $this->json($userData);
+    }
+
+    #[Route('/api/user/{id}', name:"user.update", methods: ['PUT'])]
+    public function updateUser(User $user, Request $request, SerializerInterface $serializer, EntityManagerInterface $manager, UserPasswordHasherInterface $passwordHasher) {
+        
+        $requestData = json_decode($request->getContent(), true);
+        if (isset($requestData['active']) && $requestData['active'] === true) {
+            $user->setStatus('on');
+        } else {
+            // Désérialiser les données JSON pour obtenir les valeurs à mettre à jour
+            $updateUserData = $serializer->deserialize($request->getContent(), User::class, 'json');
+            
+            // Vérifier si la propriété est définie dans les données JSON avant de la modifier
+            if (isset($requestData['password'])) {
+                $hashedPassword = $passwordHasher->hashPassword($updateUserData, $updateUserData->getPassword());
+                $user->setPassword($hashedPassword);
+            }if (isset($requestData['username'])) {
+                $user->setUsername($updateUserData->getUsername());
+            }if (isset($requestData['avatarId'])) {
+                $user->setAvatarId($updateUserData->getAvatarId());
+            }
+        }
+    
+        $manager->persist($user);
+        $manager->flush();
+    
+        return new JsonResponse(null, JsonResponse::HTTP_NO_CONTENT);
     }
 }

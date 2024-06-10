@@ -57,8 +57,6 @@ class SaveController extends AbstractController
     
         $date = new \DateTime();
         $save
-            ->setCreatedAt($date)
-            ->setUpdatedAt($date)
             ->setStatus('on');
         
         $errors = $validator->validate($save);

@@ -43,13 +43,12 @@ class Essential
     private ?string $status = null;
 
     #[Groups(["getByCityOrCountry", "getAllEssential"])]
-    #[ORM\OneToMany(mappedBy: 'essential', targetEntity: DownloadedFiles::class)]
-    private Collection $images;
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $imagesLink = null;
 
     public function __construct()
     {
         $this->idGeo = new ArrayCollection();
-        $this->images = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -141,32 +140,14 @@ class Essential
         return $this;
     }
 
-    /**
-     * @return Collection<int, DownloadedFiles>
-     */
-    public function getImages(): Collection
+    public function getImagesLink(): ?string
     {
-        return $this->images;
+        return $this->imagesLink;
     }
 
-    public function addImage(DownloadedFiles $image): static
+    public function setImagesLink(?string $imagesLink): static
     {
-        if (!$this->images->contains($image)) {
-            $this->images->add($image);
-            $image->setEssential($this);
-        }
-
-        return $this;
-    }
-
-    public function removeImage(DownloadedFiles $image): static
-    {
-        if ($this->images->removeElement($image)) {
-            // set the owning side to null (unless already changed)
-            if ($image->getEssential() === $this) {
-                $image->setEssential(null);
-            }
-        }
+        $this->imagesLink = $imagesLink;
 
         return $this;
     }

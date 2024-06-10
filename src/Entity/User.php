@@ -35,6 +35,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'users', targetEntity: Personna::class)]
     private Collection $personnas;
 
+    #[ORM\Column]
+    private ?int $avatarId = null;
+
     public function __construct()
     {
         $this->personnas = new ArrayCollection();
@@ -148,6 +151,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $personna->setUsers(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getAvatarId(): ?int
+    {
+        return $this->avatarId;
+    }
+
+    public function setAvatarId(int $avatarId): static
+    {
+        $this->avatarId = $avatarId;
 
         return $this;
     }

@@ -43,17 +43,16 @@ class Info
     private TypeInfo $idTypeInfo;
 
     #[Groups(["getByCityOrCountry", "getAllInfo"])]
-    #[ORM\OneToMany(mappedBy: 'info', targetEntity: DownloadedFiles::class)]
-    private Collection $images;
-
-    #[Groups(["getByCityOrCountry", "getAllInfo"])]
     #[ORM\Column(length: 255)]
     private ?string $titre = null;
+
+    #[Groups(["getByCityOrCountry", "getAllInfo"])]
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $imageLink = null;
 
     public function __construct()
     {
         $this->idGeo = new ArrayCollection();
-        $this->images = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -145,36 +144,6 @@ class Info
         return $this;
     }
 
-    /**
-     * @return Collection<int, DownloadedFiles>
-     */
-    public function getImages(): Collection
-    {
-        return $this->images;
-    }
-
-    public function addImage(DownloadedFiles $image): static
-    {
-        if (!$this->images->contains($image)) {
-            $this->images->add($image);
-            $image->setInfo($this);
-        }
-
-        return $this;
-    }
-
-    public function removeImage(DownloadedFiles $image): static
-    {
-        if ($this->images->removeElement($image)) {
-            // set the owning side to null (unless already changed)
-            if ($image->getInfo() === $this) {
-                $image->setInfo(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function getTitre(): ?string
     {
         return $this->titre;
@@ -183,6 +152,18 @@ class Info
     public function setTitre(string $titre): static
     {
         $this->titre = $titre;
+
+        return $this;
+    }
+
+    public function getImageLink(): ?string
+    {
+        return $this->imageLink;
+    }
+
+    public function setImageLink(?string $imageLink): static
+    {
+        $this->imageLink = $imageLink;
 
         return $this;
     }

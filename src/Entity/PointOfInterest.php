@@ -53,10 +53,6 @@ class PointOfInterest
     #[ORM\ManyToMany(targetEntity: Save::class, mappedBy: 'idPointOfInterest')]
     private Collection $saves;
 
-    #[Groups(["getAllPointOfInterest", "getAllSave", "getByCityOrCountry"])]
-    #[ORM\OneToMany(mappedBy: 'pointOfInterest', targetEntity: DownloadedFiles::class)]
-    private Collection $images;
-
     //"getByCityOrCountry"
     #[Groups(["getAllPointOfInterest", "getAllSave"])]
     #[ORM\OneToMany(mappedBy: 'pointOfInterest', targetEntity: Personna::class)]
@@ -66,11 +62,14 @@ class PointOfInterest
     #[ORM\Column(length: 255)]
     private ?string $titre = null;
 
+    #[Groups(["getAllPointOfInterest", "getAllSave", "getByCityOrCountry"])]
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $imageLink = null;
+
     public function __construct()
     {
         $this->idIType = new ArrayCollection();
         $this->saves = new ArrayCollection();
-        $this->images = new ArrayCollection();
         $this->personnas = new ArrayCollection();
     }
 
@@ -215,36 +214,6 @@ class PointOfInterest
     }
 
     /**
-     * @return Collection<int, DownloadedFiles>
-     */
-    public function getImages(): Collection
-    {
-        return $this->images;
-    }
-
-    public function addImage(DownloadedFiles $image): static
-    {
-        if (!$this->images->contains($image)) {
-            $this->images->add($image);
-            $image->setPointOfInterest($this);
-        }
-
-        return $this;
-    }
-
-    public function removeImage(DownloadedFiles $image): static
-    {
-        if ($this->images->removeElement($image)) {
-            // set the owning side to null (unless already changed)
-            if ($image->getPointOfInterest() === $this) {
-                $image->setPointOfInterest(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
      * @return Collection<int, Personna>
      */
     public function getPersonnas(): Collection
@@ -282,6 +251,18 @@ class PointOfInterest
     public function setTitre(string $titre): static
     {
         $this->titre = $titre;
+
+        return $this;
+    }
+
+    public function getImageLink(): ?string
+    {
+        return $this->imageLink;
+    }
+
+    public function setImageLink(?string $imageLink): static
+    {
+        $this->imageLink = $imageLink;
 
         return $this;
     }
