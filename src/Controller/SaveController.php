@@ -31,25 +31,14 @@ class SaveController extends AbstractController
         ]);
     }
 
-    #[Route('/api/save', name: 'save.getAll', methods: ['GET'])]
-    public function getAllCountryAndCityCache(SaveRepository $repository, SerializerInterface $serializer, TagAwareCacheInterface $cache): JsonResponse
+    #[Route('/api/user/{userId}/geo/{geoId}', name: 'get_by_user_and_geo', methods: ['GET'])]
+    public function getByUserAndGeo(int $userId, int $geoId, SaveRepository $saveRepository, SerializerInterface $serializer): JsonResponse
     {
-        $idcachegetAllSave = "getAllSave";
-        $jsonSave = $cache->get($idcachegetAllSave, function(ItemInterface $item) use ($repository, $serializer){
-            $item->tag('getAllSave');
-            $saves = $repository->findAll();
-            return $serializer->serialize($saves, 'json', ['groups' => 'getAllSave']);
-        });
+        $saves = $saveRepository->findByUserIdAndGeoId($userId, $geoId);
+        $jsonSaves = $serializer->serialize($saves, 'json', ['groups' => 'getAllSave']);
 
-        return new JsonResponse($jsonSave, 200, [], true);
+        return new JsonResponse($jsonSaves, JsonResponse::HTTP_OK, [], true);
     }
-
-    #[Route("/api/save/{save}", name: "save.get", methods: ["GET"])]
-    public function getSave(Save $save, SerializerInterface $serializer): JsonResponse {
-        $jsonSave = $serializer->serialize($save, 'json', ['groups' => 'getAllSave']);
-        return new JsonResponse($jsonSave, 200, [], true);
-    }
-
 
 
     #[Route('/api/save', name: 'save.post', methods: ['POST'])]
