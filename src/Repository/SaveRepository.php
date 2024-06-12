@@ -45,4 +45,18 @@ class SaveRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+    /**
+     * @return Save[]
+     */
+    public function findByUserIdAndGeoId($userId, $geoId): array
+    {
+        return $this->createQueryBuilder('s')
+            ->andWhere('s.UserId = :userId')
+            ->andWhere('s.idGeo = :geoId')
+            ->setParameter('userId', $userId)
+            ->setParameter('geoId', $geoId)
+            ->getQuery()
+            ->getResult();
+    }
 }

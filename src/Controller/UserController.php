@@ -107,7 +107,7 @@ class UserController extends AbstractController
         return $this->json($userData);
     }
 
-    #[Route('/api/user/{id}', name:"user.update", methods: ['PUT'])]
+    #[Route('/api/user/{uuid}', name:"user.update", methods: ['PUT'])]
     public function updateUser(User $user, Request $request, SerializerInterface $serializer, EntityManagerInterface $manager, UserPasswordHasherInterface $passwordHasher) {
         
         $requestData = json_decode($request->getContent(), true);
@@ -118,12 +118,12 @@ class UserController extends AbstractController
             $updateUserData = $serializer->deserialize($request->getContent(), User::class, 'json');
             
             // Vérifier si la propriété est définie dans les données JSON avant de la modifier
-            if (isset($requestData['password'])) {
+            if (isset($requestData['password']) && $requestData['password'] !== null) {
                 $hashedPassword = $passwordHasher->hashPassword($updateUserData, $updateUserData->getPassword());
                 $user->setPassword($hashedPassword);
-            }if (isset($requestData['username'])) {
+            }if (isset($requestData['username']) && $requestData['username'] !== null) {
                 $user->setUsername($updateUserData->getUsername());
-            }if (isset($requestData['avatarId'])) {
+            }if (isset($requestData['avatarId']) && $requestData['avatarId'] !== null) {
                 $user->setAvatarId($updateUserData->getAvatarId());
             }
         }

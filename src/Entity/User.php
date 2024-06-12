@@ -38,9 +38,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?int $avatarId = null;
 
+    #[ORM\OneToMany(mappedBy: 'UserId', targetEntity: Save::class)]
+    private Collection $saves;
+
     public function __construct()
     {
         $this->personnas = new ArrayCollection();
+        $this->saves = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -163,6 +167,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setAvatarId(int $avatarId): static
     {
         $this->avatarId = $avatarId;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Save>
+     */
+    public function getSaves(): Collection
+    {
+        return $this->saves;
+    }
+
+    public function addSave(Save $save): static
+    {
+        if (!$this->saves->contains($save)) {
+            $this->saves->add($save);
+            $save->setUserId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSave(Save $save): static
+    {
+        if ($this->saves->removeElement($save)) {
+            // set the owning side to null (unless already changed)
+            if ($save->getUserId() === $this) {
+                $save->setUserId(null);
+            }
+        }
 
         return $this;
     }

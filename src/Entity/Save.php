@@ -5,7 +5,6 @@ namespace App\Entity;
 use App\Repository\SaveRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -23,13 +22,15 @@ class Save
     private Collection $idPointOfInterest;
 
     #[Groups(['getAllSave'])]
-    #[ORM\ManyToOne(inversedBy: 'saves')]
-    private geo $idGeo;
+    #[ORM\ManyToOne(inversedBy: 'saves', targetEntity: Geo::class)]
+    private ?Geo $idGeo = null;
 
     #[Groups(['getAllSave'])]
     #[ORM\Column(length: 24)]
     private string $status;
 
+    #[ORM\ManyToOne(inversedBy: 'saves')]
+    private ?User $UserId = null;
 
     public function __construct()
     {
@@ -65,12 +66,12 @@ class Save
         return $this;
     }
 
-    public function getIdGeo(): ?geo
+    public function getIdGeo(): ?Geo
     {
         return $this->idGeo;
     }
 
-    public function setIdGeo(?geo $idGeo): static
+    public function setIdGeo(?Geo $idGeo): static
     {
         $this->idGeo = $idGeo;
 
@@ -85,6 +86,18 @@ class Save
     public function setStatus(string $status): static
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    public function getUserId(): ?User
+    {
+        return $this->UserId;
+    }
+
+    public function setUserId(?User $UserId): static
+    {
+        $this->UserId = $UserId;
 
         return $this;
     }
