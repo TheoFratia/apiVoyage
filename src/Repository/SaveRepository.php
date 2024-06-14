@@ -59,4 +59,25 @@ class SaveRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    /**
+     * Supprime une entité Save en utilisant idPointOfInterest et idUser.
+     *
+     * @param int $idPointOfInterest
+     * @param int $idUser
+     */
+    public function deleteByPointOfInterestAndUser(int $idPointOfInterest, int $idUser): void
+    {
+        $entityManager = $this->getEntityManager();
+
+        $query = $entityManager->createQuery(
+            'DELETE FROM App\Entity\Save s 
+             WHERE :pointOfInterest MEMBER OF s.idPointOfInterest 
+             AND s.UserId = :idUser'
+        )
+        ->setParameter('pointOfInterest', $idPointOfInterest)
+        ->setParameter('idUser', $idUser);
+
+        $query->execute();
+    }
 }

@@ -40,7 +40,6 @@ class EssentialController extends AbstractController
         return new JsonResponse($jsonEssential, 200, [], true);
     }
 
-
     #[Route("/api/essential/{essential}", name: "essential.get", methods: ["GET"])]
     public function getEssential(Essential $essential, SerializerInterface $serializer): JsonResponse {
         $jsonEssential = $serializer->serialize($essential, 'json', ['groups' => 'getAllEssential']);

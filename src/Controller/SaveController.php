@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Save;
+use App\Entity\User;
+use App\Entity\PointOfInterest;
 use App\Repository\SaveRepository;
 use App\Repository\PointOfInterestRepository;
 use App\Repository\GeoRepository;
@@ -134,19 +136,25 @@ class SaveController extends AbstractController
         return new JsonResponse(null, JsonResponse::HTTP_NO_CONTENT);
     }
 
-    
-    #[Route("/api/save/{idSave}", name:"save.delete", methods:["DELETE"])]
-    public function delete(Request $request, Save $idSave, EntityManagerInterface $manager): JsonResponse
+    #[Route("/api/save", name: "save.delete", methods: ["DELETE"])]
+    public function delete(Request $request, SaveRepository $saveRepository, EntityManagerInterface $manager): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
 
-        if (isset($data['force']) && $data['force'] === true) {
-            $manager->remove($idSave);
-        } else {
-            $idSave->setStatus('off');
-            $manager->persist($idSave);
+        // Vérifiez que les paramètres nécessaires sont présents
+        if (!isset($data['idPointOfInterest']) || !isset($data['idUser'])) {
+            return new JsonResponse(['error' => 'idPointOfInterest and idUser must be provided'], JsonResponse::HTTP_BAD_REQUEST);
         }
-        $manager->flush();
-        return new JsonResponse(null, JsonResponse::HTTP_NO_CONTENT);
+
+        // Utilisez la méthode du repository pour supprimer l'entité Save
+        try {
+            $saveRepository->deleteByPointOfInterestAndUser($data['idPointOfInterest'], $data['idUser']);
+
+            return new JsonResponse(null, JsonResponse::HTTP_NO_CONTENT);
+        } catch (\Exception $e) {
+            return new JsonResponse(['error' => 'Delete operation failed: ' . $e->getMessage()], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
+
+
 }
