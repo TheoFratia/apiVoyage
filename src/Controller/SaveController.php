@@ -31,7 +31,14 @@ class SaveController extends AbstractController
         ]);
     }
 
-    #[Route('/api/user/{userId}/geo/{geoId}', name: 'get_by_user_and_geo', methods: ['GET'])]
+    #[Route('/api/save', name: 'save.getAll', methods: ['GET'])]
+    public function getAllSave(SaveRepository $repository, SerializerInterface $serializer, TagAwareCacheInterface $cache): JsonResponse
+    {
+        $saves = $repository->findAll();
+        return new JsonResponse($jsonSave, 200, [], true);
+    }
+
+    #[Route('/api/user/{userId}/geo/{geoId}', name: 'save.getByUserAndGeo', methods: ['GET'])]
     public function getByUserAndGeo(int $userId, int $geoId, SaveRepository $saveRepository, SerializerInterface $serializer): JsonResponse
     {
         $saves = $saveRepository->findByUserIdAndGeoId($userId, $geoId);
