@@ -25,9 +25,11 @@ class Save
     #[ORM\Column(length: 24)]
     private string $status;
 
+    #[Groups(['getAllSave', 'excludeGeo'])]
     #[ORM\ManyToOne(inversedBy: 'saves')]
     private ?User $UserId = null;
 
+    #[Groups(['getAllSave'])]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 

@@ -40,13 +40,13 @@ class SaveController extends AbstractController
         return new JsonResponse($jsonSave, 200, [], true);
     }
 
-    #[Route('/api/user/{userId}/geo/{geoId}', name: 'save.getByUserAndGeo', methods: ['GET'])]
-    public function getByUserAndGeo(int $userId, int $geoId, SaveRepository $saveRepository, SerializerInterface $serializer): JsonResponse
+    #[Route('/api/saves/{uuid}/{saveName}', name: 'saves_by_uuid_name', methods: ['GET'])]
+    public function getSavesByUuidAndName(string $uuid, string $saveName, SaveRepository $repository, SerializerInterface $serializer): JsonResponse
     {
-        $saves = $saveRepository->findByUserIdAndGeoId($userId, $geoId);
-        $jsonSaves = $serializer->serialize($saves, 'json', ['groups' => 'getAllSave']);
+        $saves = $repository->findByUserUuidAndSaveName($uuid, $saveName);
 
-        return new JsonResponse($jsonSaves, JsonResponse::HTTP_OK, [], true);
+        $jsonContent = $serializer->serialize($saves, 'json', ['groups' => ['getAllSave', 'excludeGeo']]);
+        return new JsonResponse($jsonContent, 200, [], true);
     }
 
 

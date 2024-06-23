@@ -80,4 +80,17 @@ class SaveRepository extends ServiceEntityRepository
 
         $query->execute();
     }
+
+    public function findByUserUuidAndSaveName(string $uuid, string $saveName): array
+    {
+        return $this->createQueryBuilder('s')
+            ->join('s.UserId', 'u')
+            ->andWhere('u.uuid = :uuid')
+            ->andWhere('s.name = :name')
+            ->setParameter('uuid', $uuid)
+            ->setParameter('name', $saveName)
+            ->getQuery()
+            ->getResult();
+    }
+
 }
