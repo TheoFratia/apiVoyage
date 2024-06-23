@@ -69,9 +69,11 @@ class SaveController extends AbstractController
             $save->addIdPointOfInterest($newPointOfInterest);
         }
 
-        $newGeo = $repositoryG->find($data["idGeo"]);
-        $save->setIdGeo($newGeo);
-        $newUser = $repositoryU->find($data["UserId"]);
+        $newUser = $repositoryU->findOneByUuid($data["uuid"]);
+        if (!$newUser) {
+            return new JsonResponse(['error' => 'User not found'], JsonResponse::HTTP_NOT_FOUND);
+        }
+        $save->setName($data["name"]);
         $save->setUserId($newUser);
         $save->setStatus('on');
 

@@ -22,15 +22,14 @@ class Save
     private Collection $idPointOfInterest;
 
     #[Groups(['getAllSave'])]
-    #[ORM\ManyToOne(inversedBy: 'saves', targetEntity: Geo::class)]
-    private ?Geo $idGeo = null;
-
-    #[Groups(['getAllSave'])]
     #[ORM\Column(length: 24)]
     private string $status;
 
     #[ORM\ManyToOne(inversedBy: 'saves')]
     private ?User $UserId = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $name = null;
 
     public function __construct()
     {
@@ -66,18 +65,6 @@ class Save
         return $this;
     }
 
-    public function getIdGeo(): ?Geo
-    {
-        return $this->idGeo;
-    }
-
-    public function setIdGeo(?Geo $idGeo): static
-    {
-        $this->idGeo = $idGeo;
-
-        return $this;
-    }
-
     public function getStatus(): ?string
     {
         return $this->status;
@@ -98,6 +85,18 @@ class Save
     public function setUserId(?User $UserId): static
     {
         $this->UserId = $UserId;
+
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): static
+    {
+        $this->name = $name;
 
         return $this;
     }
