@@ -49,6 +49,52 @@ class SaveController extends AbstractController
         return new JsonResponse($jsonContent, 200, [], true);
     }
 
+    #[Route('api/saves/{uuid}', name: 'get_saves_by_user')]
+    public function getSavesByUser(string $uuid, UserRepository $repositoryU, SaveRepository $saveRepository, SerializerInterface $serializer): JsonResponse
+    {
+        $user = $repositoryU->findOneBy(['uuid' => $uuid]);
+
+        if (!$user) {
+            return new JsonResponse(['error' => 'User not found'], 404);
+        }
+
+        $saves = $saveRepository->findBy(['UserId' => $user]);
+
+        // Array to hold merged saves by name
+        $mergedSaves = [];
+
+        foreach ($saves as $save) {
+            $saveName = $save->getName();
+
+            if (!isset($mergedSaves[$saveName])) {
+                $mergedSaves[$saveName] = $save;
+            } else {
+                // Merge PointOfInterest
+                foreach ($save->getIdPointOfInterest() as $pointOfInterest) {
+                    $mergedSaves[$saveName]->addIdPointOfInterest($pointOfInterest);
+                }
+            }
+        }
+
+        // Calculate total price of all PointOfInterest
+        $totalPrice = 0;
+
+        foreach ($mergedSaves as $save) {
+            foreach ($save->getIdPointOfInterest() as $pointOfInterest) {
+                $totalPrice += $pointOfInterest->getPrice();
+            }
+        }
+
+        $response = [];
+        foreach ($mergedSaves as $save) {
+            $serializedSave = $serializer->serialize($save, 'json', ['groups' => ['getAllSave']]);
+            $decodedSave = json_decode($serializedSave, true);
+            $decodedSave['totalPrice'] = $totalPrice;
+            $response[] = $decodedSave;
+        }
+
+        return new JsonResponse($response);
+    }
 
     #[Route('/api/save', name: 'save.post', methods: ['POST'])]
     public function createSave(
@@ -139,18 +185,19 @@ class SaveController extends AbstractController
     }
 
     #[Route("/api/save", name: "save.delete", methods: ["DELETE"])]
-    public function delete(Request $request, SaveRepository $saveRepository, EntityManagerInterface $manager): JsonResponse
+    public function delete(Request $request, SaveRepository $saveRepository, EntityManagerInterface $manager, UserRepository $userRepository): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
 
         // Vérifiez que les paramètres nécessaires sont présents
-        if (!isset($data['idPointOfInterest']) || !isset($data['idUser'])) {
-            return new JsonResponse(['error' => 'idPointOfInterest and idUser must be provided'], JsonResponse::HTTP_BAD_REQUEST);
+        if (!isset($data['idPointOfInterest']) || !isset($data['uuid'])) {
+            return new JsonResponse(['error' => 'idPointOfInterest and uuid must be provided'], JsonResponse::HTTP_BAD_REQUEST);
         }
 
         // Utilisez la méthode du repository pour supprimer l'entité Save
         try {
-            $saveRepository->deleteByPointOfInterestAndUser($data['idPointOfInterest'], $data['idUser']);
+            $user = $userRepository->findOneBy(['uuid' => $data['uuid']]);
+            $saveRepository->deleteByPointOfInterestAndUser($data['idPointOfInterest'], $user->getId());
 
             return new JsonResponse(null, JsonResponse::HTTP_NO_CONTENT);
         } catch (\Exception $e) {
