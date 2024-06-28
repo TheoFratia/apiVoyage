@@ -186,5 +186,23 @@ class SaveController extends AbstractController
         }
     }
 
+    #[Route('/api/saves', name: 'delete_saves', methods: ['DELETE'])]
+    public function deleteSaves(Request $request, SaveRepository $saveRepository, EntityManagerInterface $entityManager, UserRepository $userRepository): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+
+        if (!isset($data['uuid']) || !isset($data['name'])) {
+            return new JsonResponse(['error' => 'Missing parameters'], 400);
+        }
+
+        $user = $userRepository->findOneBy(['uuid' => $data['uuid']]);
+        $name = $data['name'];
+
+        $count = $saveRepository->deleteByUserIdAndName($user->getId(), $name);
+
+        $entityManager->flush();
+
+        return new JsonResponse(['message' => "Deleted $count saves with name '$name' for user ID '{$user->getId()}'"]);
+    }
 
 }

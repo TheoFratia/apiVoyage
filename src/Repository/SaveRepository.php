@@ -93,4 +93,15 @@ class SaveRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function deleteByUserIdAndName($userId, $name): int
+    {
+        $qb = $this->createQueryBuilder('s')
+            ->delete()
+            ->where('s.UserId = :userId')
+            ->andWhere('s.name = :name')
+            ->setParameter('userId', $userId)
+            ->setParameter('name', $name);
+
+        return $qb->getQuery()->execute();
+    }
 }
