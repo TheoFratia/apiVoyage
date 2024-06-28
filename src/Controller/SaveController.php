@@ -60,33 +60,14 @@ class SaveController extends AbstractController
 
         $saves = $saveRepository->findBy(['UserId' => $user]);
 
-        // Array to hold merged saves by name
-        $mergedSaves = [];
-
+        $response = [];
         foreach ($saves as $save) {
-            $saveName = $save->getName();
-
-            if (!isset($mergedSaves[$saveName])) {
-                $mergedSaves[$saveName] = $save;
-            } else {
-                // Merge PointOfInterest
-                foreach ($save->getIdPointOfInterest() as $pointOfInterest) {
-                    $mergedSaves[$saveName]->addIdPointOfInterest($pointOfInterest);
-                }
-            }
-        }
-
-        // Calculate total price of all PointOfInterest
-        $totalPrice = 0;
-
-        foreach ($mergedSaves as $save) {
+            // Calculer le prix total pour chaque save
+            $totalPrice = 0;
             foreach ($save->getIdPointOfInterest() as $pointOfInterest) {
                 $totalPrice += $pointOfInterest->getPrice();
             }
-        }
 
-        $response = [];
-        foreach ($mergedSaves as $save) {
             $serializedSave = $serializer->serialize($save, 'json', ['groups' => ['getAllSave']]);
             $decodedSave = json_decode($serializedSave, true);
             $decodedSave['totalPrice'] = $totalPrice;
