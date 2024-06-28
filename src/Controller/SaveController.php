@@ -60,17 +60,28 @@ class SaveController extends AbstractController
 
         $saves = $saveRepository->findBy(['UserId' => $user]);
 
-        $response = [];
+        // Regrouper les saves par nom
+        $groupedSaves = [];
         foreach ($saves as $save) {
-            // Calculer le prix total pour chaque save
-            $totalPrice = 0;
-            foreach ($save->getIdPointOfInterest() as $pointOfInterest) {
-                $totalPrice += $pointOfInterest->getPrice();
+            $name = $save->getName();
+            if (!isset($groupedSaves[$name])) {
+                $groupedSaves[$name] = [
+                    'save' => $save,
+                    'totalPrice' => 0
+                ];
             }
+            
+            foreach ($save->getIdPointOfInterest() as $pointOfInterest) {
+                $groupedSaves[$name]['totalPrice'] += $pointOfInterest->getPrice();
+            }
+        }
 
-            $serializedSave = $serializer->serialize($save, 'json', ['groups' => ['getAllSave']]);
+        // Créer la réponse regroupée
+        $response = [];
+        foreach ($groupedSaves as $groupedSave) {
+            $serializedSave = $serializer->serialize($groupedSave['save'], 'json', ['groups' => ['getAllSave']]);
             $decodedSave = json_decode($serializedSave, true);
-            $decodedSave['totalPrice'] = $totalPrice;
+            $decodedSave['totalPrice'] = $groupedSave['totalPrice'];
             $response[] = $decodedSave;
         }
 
