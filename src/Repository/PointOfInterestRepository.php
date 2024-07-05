@@ -21,6 +21,22 @@ class PointOfInterestRepository extends ServiceEntityRepository
         parent::__construct($registry, PointOfInterest::class);
     }
 
+    /**
+     * @param Geo $geo
+     * @param float $budget
+     * @return PointOfInterest[]
+     */
+    public function findByGeoAndBudget(Geo $geo, float $budget): array
+    {
+        return $this->createQueryBuilder('poi')
+            ->andWhere('poi.idGeo = :geo')
+            ->andWhere('poi.price <= :budget')
+            ->setParameter('geo', $geo)
+            ->setParameter('budget', $budget)
+            ->getQuery()
+            ->getResult();
+    }
+
 //    /**
 //     * @return PointOfInterest[] Returns an array of PointOfInterest objects
 //     */

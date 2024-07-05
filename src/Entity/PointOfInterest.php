@@ -66,6 +66,10 @@ class PointOfInterest
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $imageLink = null;
 
+    #[Groups(["getAllPointOfInterest", "getAllSave", "getByCityOrCountry"])]
+    #[ORM\Column(nullable: true)]
+    private ?float $Note = null;
+
     public function __construct()
     {
         $this->idIType = new ArrayCollection();
@@ -263,6 +267,18 @@ class PointOfInterest
     public function setImageLink(?string $imageLink): static
     {
         $this->imageLink = $imageLink;
+
+        return $this;
+    }
+
+    public function getNote(): ?int
+    {
+        return $this->Note;
+    }
+
+    public function setNote(?int $Note): static
+    {
+        $this->Note = $Note;
 
         return $this;
     }

@@ -105,6 +105,117 @@ public function getAllCountryAndCityCache(GeoRepository $repository, SerializerI
         return new JsonResponse($jsonGeo, JsonResponse::HTTP_CREATED, ["Location" => $location], true);
     }
 
+
+    #[Route("/api/geo/{geo}/{budget}", name: "geo.getActivitiesByBudget", methods: ["GET"])]
+    public function getActivitiesByBudget(string $geo, float $budget, GeoRepository $geoRepository, SerializerInterface $serializer): JsonResponse
+    {
+        // Récupérer les informations de la ville ou du pays
+        $theCity = $geoRepository->findByCity($geo);
+        $theCountry = $geoRepository->findByCountry($geo);
+    
+        if (empty($theCity) && empty($theCountry)) {
+            return new JsonResponse('Aucun résultat pour "' . $geo . '"', 404);
+        }
+    
+        $geoEntities = !empty($theCity) ? $theCity : $theCountry;
+        $result = [];
+    
+        foreach ($geoEntities as $geoEntity) {
+            $activities = $geoEntity->getPointOfInterests();
+            $filteredActivities = [];
+            $otherPointsOfInterest = [];
+    
+            foreach ($activities as $activity) {
+                $isActivity = false;
+                foreach ($activity->getIdIType() as $type) {
+                    if ($type->getType() === 'activity') {
+                        $isActivity = true;
+                        break;
+                    }
+                }
+                if ($isActivity) {
+                    $filteredActivities[] = $activity;
+                } else {
+                    $otherPointsOfInterest[] = $activity;
+                }
+            }
+
+            usort($filteredActivities, function ($a, $b) {
+                return $b->getNote() <=> $a->getNote();
+            });
+
+            $selectedActivities = [];
+            $totalCost = 0;
+    
+            foreach ($filteredActivities as $activity) {
+                $activityCost = $activity->getPrice();
+                if ($totalCost + $activityCost <= $budget) {
+                    $selectedActivities[] = $activity;
+                    $totalCost += $activityCost;
+                }
+            }
+    
+            // Préparer les résultats pour inclure les informations géographiques
+            $geoInfo = [
+                'id' => $geoEntity->getId(),
+                'city' => $geoEntity->getCity(),
+                'country' => $geoEntity->getCountry(),
+                'address' => $geoEntity->getAddress(),
+                'longitude' => $geoEntity->getLongitude(),
+                'latitude' => $geoEntity->getLatitude(),
+                'updated_at' => $geoEntity->getUpdatedAt()->format('c'),
+                'created_at' => $geoEntity->getCreatedAt()->format('c'),
+                'status' => $geoEntity->getStatus(),
+                'zipCode' => $geoEntity->getZipCode(),
+                'pointOfInterests' => []
+            ];
+    
+            foreach ($selectedActivities as $activity) {
+                $geoInfo['pointOfInterests'][] = [
+                    'id' => $activity->getId(),
+                    'description' => $activity->getDescription(),
+                    'link' => $activity->getLink(),
+                    'price' => $activity->getPrice(),
+                    'updated_at' => $activity->getUpdatedAt()->format('c'),
+                    'created_at' => $activity->getCreatedAt()->format('c'),
+                    'idIType' => array_map(function($type) { return ['type' => $type->getType()]; }, $activity->getIdIType()->toArray()),
+                    'status' => $activity->getStatus(),
+                    'titre' => $activity->getTitre(),
+                    'imageLink' => $activity->getImageLink(),
+                    'Note' => $activity->getNote(),
+                ];
+            }
+    
+            // Ajouter les autres points d'intérêt sans filtrage par budget
+            foreach ($otherPointsOfInterest as $activity) {
+                $geoInfo['pointOfInterests'][] = [
+                    'id' => $activity->getId(),
+                    'description' => $activity->getDescription(),
+                    'link' => $activity->getLink(),
+                    'price' => $activity->getPrice(),
+                    'updated_at' => $activity->getUpdatedAt()->format('c'),
+                    'created_at' => $activity->getCreatedAt()->format('c'),
+                    'idIType' => array_map(function($type) { return ['type' => $type->getType()]; }, $activity->getIdIType()->toArray()),
+                    'status' => $activity->getStatus(),
+                    'titre' => $activity->getTitre(),
+                    'imageLink' => $activity->getImageLink(),
+                    'Note' => $activity->getNote(),
+                ];
+            }
+    
+            $result[] = $geoInfo;
+        }
+    
+        if (empty($result)) {
+            return new JsonResponse('Aucune activité trouvée pour le budget spécifié.', 404);
+        }
+    
+        return new JsonResponse($serializer->serialize($result, 'json', ['groups' => 'getByCityOrCountry']), 200, [], true);
+    }
+
+
+
+
     #[Route('/api/geo/{geo}', name:"geo.update", methods: ['PUT'])]
     public function updateGeo(Geo $geo, Request $request, SerializerInterface $serializer, EntityManagerInterface $manager) {
         
